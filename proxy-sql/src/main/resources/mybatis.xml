@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--    设置日志-->
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+<!--    设置别名-->
+<!--   <typeAliases>-->
+<!--       <typeAlias type="com.bjpowernod.entity.Student" alias="stu"/>-->
+<!--   </typeAliases>-->
+
+<!--  <typeAliases>-->
+<!--      <package name="com.bjpowernod.entity"/>-->
+<!--  </typeAliases>-->
+
+    <environments default="mysql">
+        <environment id="mysql">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+
+                <property name="url" value="jdbc:mysql://localhost:3306/ssm?useUnicode=true&amp;characterEncoding=utf-8"/>
+
+                <property name="username" value="root"/>
+                <property name="password" value="1234"/>
+            </dataSource>
+
+        </environment>
+    </environments>
+
+    <mappers>
+        <!--        指定mapper文件的路径
+            resourse="mapper 文件的路径 用/分来分割
+            一个mapper resource 制定一个mapper文件-->
+        <mapper resource="com/bjpowernod/dao/StudentDao.xml"/>
+    </mappers>
+</configuration>

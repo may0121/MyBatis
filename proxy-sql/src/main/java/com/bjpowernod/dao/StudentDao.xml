@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+parameterType:指定dao接口参数类型
+这个属性的值可以使用java类型的额全限定名称或者mybatis定义的别名
+-->
+<mapper namespace="com.bjpowernod.dao.StudentDao">
+<!--可以在name前面添加or  在where 后面添加id=-1 等保证SQL语句正确-->
+ <select id="selectIf" resultType="com.bjpowernod.entity.Student">
+     select * from student where
+    <if test="name!=null and name!= ''">
+
+     name=#{name}
+    </if>
+    <if test="age>0">
+        or age &lt; #{age}
+    </if>
+ </select>
+
+<!--    定义代码片段-->
+    <sql id="selectStudent">
+        select * from student
+    </sql>
+    <sql id="studentID">
+        id,name,email,age
+    </sql>
+
+<!--  判断条件成立 就会加上where关键字，后面的or 在条件成立的情况上会去掉保证语句语法正确
+      要是if条件都不成立  就不会加上where关键字 直接查询表单数据
+      前提：setname =null 不是不设置name属性-->
+    <select id="selectWhere" resultType="com.bjpowernod.entity.Student">
+        <include refid="selectStudent"/>
+        <where>
+            <if test="name!=null and name!= ''">
+                or name=#{name}
+            </if>
+            <if test="age>0">
+                or age &lt; #{age}
+            </if>
+        </where>
+    </select>
+
+
+<!--    foreach 简单类型
+        为了保证sal语句在各中情况下语法正确，要注意条件判断-->
+    <select id="selectForeachOne" resultType="com.bjpowernod.entity.Student">
+        select  <include refid="studentID"/>  from student
+        <if test="list!=null and list.size>0">
+            where id in
+            <foreach collection="list" open="(" close=")" separator="," item="myid">
+                #{myid}
+            </foreach>
+        </if>
+    </select>
+
+<!--    foreach 对象类型   对象类型传参可以调用对象的属性-->
+    <select id="selectForeachTwo" resultType="com.bjpowernod.entity.Student">
+        select * from student
+       <if test="list!=null and list.size>0">
+           where id in
+           <foreach collection="list" open="(" close=")" separator="," item="student">
+               #{student.id}
+           </foreach>
+       </if>
+    </select>
+
+
+</mapper>

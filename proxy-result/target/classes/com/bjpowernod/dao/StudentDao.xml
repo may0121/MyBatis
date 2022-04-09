@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+parameterType:指定dao接口参数类型
+这个属性的值可以使用java类型的额全限定名称或者mybatis定义的别名
+-->
+<mapper namespace="com.bjpowernod.dao.StudentDao">
+    <!--增删改查标签，sql语句-->
+    <select id="selectStudentbyId"  resultType="com.bjpowernod.dao.StudentDao">
+     select id,name,email,age from student where id=#{id}
+    </select>
+
+<!--    <select id="select"  resultType="com.bjpowernod.vo.TestObject">-->
+<!--     select id,name,email,age from student where id=#{id}-->
+<!--    </select>-->
+
+<!--    查询学生总数
+            得到的值是一行一列-->
+    <select id="countStudent"  resultType="java.lang.Long">
+     select count(*) from student
+    </select>
+
+<!--    用map作为查询结果的返回类型，其中key是列名，value是列值
+            结果只能查询一行，不然要报tomanyresultsException-->
+    <select id="selectAsMap"  resultType="java.util.Map">
+     select id,name,age from student where id=#{id}
+    </select>
+
+<!--    resultMap 的用法
+        id：给resultMap映射关系起别名，胃一直
+        type：Java类型的全限定名称-->
+    <resultMap id="customMap" type="com.bjpowernod.vo.TestObject">
+<!--        定义列名和属性名对应-->
+<!--        主键类型使用id标签-->
+        <id column="id" property="cid"/>
+<!--        非主键类型使用result标签-->
+        <result column="name" property="cname"/>
+<!--        列名和属性名相同就可以不用定义-->
+<!--        <result column="email" property="email"/>-->
+<!--        <result column="age" property="age"/>-->
+    </resultMap>
+
+<!--    使用resultMap属性指定映射关系的id
+        resultMap和resultType  不能同时使用只能二选一-->
+    <select id="select" resultMap="customMap">
+        select id,name,email,age from student where id=#{id}
+    </select>
+
+<!--    模糊查询like第一种方式-->
+    <select id="selectLikeOne" resultType="com.bjpowernod.entity.Student">
+        select * from student where name like #{name}
+    </select>
+
+
+    <select id="selectLikeTwo" resultType="com.bjpowernod.entity.Student">
+        select * from student where name like "%" #{name} "%"
+    </select>
+</mapper>
